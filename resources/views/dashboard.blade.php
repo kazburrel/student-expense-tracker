@@ -12,6 +12,13 @@
                     <index-expenses></index-expenses>
                 </div>
             </div>
+            <div class="grid grid-cols-12 gap-4">
+                <reciept-index class="col-span-4 p-5 rounded-lg mt-10 shadow-xl overflow-clip bg-white"></reciept-index>
+                <reciept-details
+                    class="col-span-8 p-5 rounded-lg mt-10 shadow-xl overflow-clip bg-white"></reciept-details>
+            </div>
+
+
         </div>
     </div>
 </x-app-layout>
