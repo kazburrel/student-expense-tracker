@@ -49,8 +49,8 @@
                             </path>
                         </svg>
                     </button>
-                    <button type="button"
-                        class="flex items-center ml-4 px-4 py-2 rounded-md bg-fuchsia-600 text-white font-bold">
+                    <button type="button" @click="$emit('scanClicked')"
+                        class=" flex items-center ml-4 px-4 py-2 rounded-md bg-fuchsia-600 text-white font-bold">
                         <svg class="mr-2 h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M19.7 6.5L17.5 8.7V16c0 1.1-.9 2-2 2H7.5V8.7l-2.2-2.2L6.5 6.5z"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
