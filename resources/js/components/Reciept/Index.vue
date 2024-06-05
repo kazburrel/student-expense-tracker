@@ -32,9 +32,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import EventBus from '../../event-bus';
+import { useToast } from 'vue-toastification';
 
 const imageData = ref(null);
 const backgroundImage = ref(null);
+const toast = useToast();
 
 const backgroundStyle = computed(() => {
     return backgroundImage.value
@@ -56,7 +58,7 @@ const onFileChange = (event) => {
         };
         reader.readAsDataURL(file);
     } else {
-        alert('File is too large or not an image.');
+        toast.erro('File is too large or not an image.');
     }
 };
 
@@ -69,14 +71,14 @@ const onDrop = (event) => {
         };
         reader.readAsDataURL(file);
     } else {
-        alert('File is too large or not an image.');
+        toast.error('File is too large or not an image.');
     }
 };
 
 
 const submitForm = async () => {
     if (!backgroundImage.value) {
-        alert('Please select a file before submitting.');
+        toast.error('Please select a file before submitting.');
         return;
     }
 

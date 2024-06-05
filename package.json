@@ -20,6 +20,7 @@
         "mitt": "^3.0.1",
         "vue": "^3.4.27",
         "vue-loader": "^17.4.2",
-        "vue-router": "^4.0.13"
+        "vue-router": "^4.0.13",
+        "vue-toastification": "^2.0.0-rc.5"
     }
 }
