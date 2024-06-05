@@ -13,10 +13,15 @@ Route::view('/', 'dashboard')->name('dashboard');
 // });
 
 Route::get('/ai', function () {
-    return OpenAI::chat()->create([
-        'model' => 'gpt-3.5-turbo',
+    $result =  OpenAI::chat()->create([
+        'model' => 'gpt-4-vision-preview',
         'messages' => [
-            ['role' => 'user', 'content' => 'Hello!'],
+            [
+                'role' => 'user',
+                'content' => 'Tell me something about laravel i may not know!'
+            ],
         ],
     ]);
+
+    echo $result->choices[0]->message->content;
 });
