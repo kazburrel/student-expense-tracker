@@ -15,13 +15,12 @@
                             <label for="file-upload"
                                 class="relative cursor-pointer rounded-md  font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
                                 <span>Upload a file</span>
-                                <input id="file-upload" name="file-upload" type="file" class="sr-only"
+                                <input id="file-upload" name="customImage" type="file" class="sr-only"
                                     @change="onFileChange" />
                             </label>
                             <p class="pl-1 ml-1">or drag and drop</p>
                         </div>
                     </form>
-
                     <p v-if="!backgroundImage" class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
                 </div>
             </div>
@@ -31,12 +30,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import axios from 'axios'; // import axios if not already imported
 import EventBus from '../../event-bus';
 import { useToast } from 'vue-toastification';
 
-const imageData = ref(null);
+const customImage = ref(null);
 const backgroundImage = ref(null);
 const toast = useToast();
+let selectedFile = null; // declare a variable to store the selected file
 
 const backgroundStyle = computed(() => {
     return backgroundImage.value
@@ -50,39 +51,38 @@ const backgroundStyle = computed(() => {
 });
 
 const onFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.size <= 10 * 1024 * 1024) {
+    selectedFile = event.target.files[0];
+    if (selectedFile && (selectedFile.size <= 3024 * 4032 * 3)) {
         const reader = new FileReader();
         reader.onload = (e) => {
             backgroundImage.value = e.target.result;
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(selectedFile);
     } else {
-        toast.erro('File is too large or not an image.');
+        toast.error('File is too large or not an image.');
     }
 };
 
 const onDrop = (event) => {
-    const file = event.dataTransfer.files[0];
-    if (file && file.size <= 10 * 1024 * 1024) {
+    selectedFile = event.dataTransfer.files[0];
+    if (selectedFile && (selectedFile.size <= 3024 * 4032 * 3)) {
         const reader = new FileReader();
         reader.onload = (e) => {
             backgroundImage.value = e.target.result;
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(selectedFile);
     } else {
         toast.error('File is too large or not an image.');
     }
 };
 
 const submitForm = async () => {
-    if (!backgroundImage.value) {
+    if (!selectedFile) {
         toast.error('Please select a file before submitting.');
         return;
     }
-
     const formData = new FormData();
-    formData.append('backgroundImage', backgroundImage.value);
+    formData.append('customImage', selectedFile);
 
     try {
         const response = await axios.post('/image-process', formData, {
@@ -90,26 +90,16 @@ const submitForm = async () => {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        console.log('Response:', response.data);
+        EventBus.emit('dataReceived', response.data)
+
     } catch (error) {
         console.error('Error:', error);
     }
 };
 
-
-
-
-// const resetForm = () => {
-//     // Reset form state here
-//     file.value = null;
-//     backgroundImage.value = null;
-// };
-
 onMounted(() => {
     EventBus.on("scan", () => {
         submitForm();
-        // console.log('hi');
     });
 });
-
 </script>

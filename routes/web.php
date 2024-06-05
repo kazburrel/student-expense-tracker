@@ -13,6 +13,7 @@ Route::view('/', 'dashboard')->name('dashboard');
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 Route::post('/image-process', [ProccessFormController::class, 'reviewForm'])->name('review.form');
+Route::get('/categories', [ProccessFormController::class, 'getCategories'])->name('get.categories');
 
 Route::get('/ai', function () {
     $result =  OpenAI::chat()->create([
