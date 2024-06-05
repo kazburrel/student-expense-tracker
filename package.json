@@ -17,6 +17,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "mitt": "^3.0.1",
         "vue": "^3.4.27",
         "vue-loader": "^17.4.2",
         "vue-router": "^4.0.13"
