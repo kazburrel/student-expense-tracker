@@ -75,7 +75,6 @@ const onDrop = (event) => {
     }
 };
 
-
 const submitForm = async () => {
     if (!backgroundImage.value) {
         toast.error('Please select a file before submitting.');
@@ -86,20 +85,18 @@ const submitForm = async () => {
     formData.append('backgroundImage', backgroundImage.value);
 
     try {
-        console.log('submitted');
-        return;
-        const response = await axios.post('YOUR_ENDPOINT', formData, {
+        const response = await axios.post('/image-process', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
         console.log('Response:', response.data);
-        // Handle response here
     } catch (error) {
         console.error('Error:', error);
-        // Handle error here
     }
 };
+
+
 
 
 // const resetForm = () => {
