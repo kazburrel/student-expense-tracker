@@ -57,10 +57,10 @@ class ProccessFormController extends Controller
                             Please extract information from the receipt and provide JSON output, ensuring no additional text or Markdown formatting is included.
     
                             Provide the information as a JSON object containing the following keys:
-                            - `store`: Indicate the name of the business or store from which the receipt originates. Adjust the spelling or capitalization if it is incorrect.
+                            - `store`: Indicate the name of the business or store from which the receipt originates with the location in bracket next to it. Adjust the spelling or capitalization if it is incorrect.
                             - `amount`: Provide the total amount of the receipt without using commas or currency symbols. If uncertain, leave this field empty string; without attempting to compute it. Additionally, if a clubcard price is identified, the total price should be chosen since that reflects what the buyer paid.
                             - `description`: A brief overview of the items bought.
-                            - `category`: When determining the appropriate, choose from the available options ($categories) based on the item's relevance. If an item appears to fit into multiple categories, list them accordingly. If you find the ideal category missing, create one using your own descriptor, accompanied by a notation indicating your authorship.
+                            - `category`: When determining the appropriate, choose from the available options ($categories) based on the item's relevance.
     
                             If you are unsure about any values, set them to an empty string.
                         "
@@ -79,6 +79,17 @@ class ProccessFormController extends Controller
         $json = strip_tags($json);
         $json = html_entity_decode($json);
         $data = json_decode($json, true);
+        if (!empty($data['category'])) {
+            $category = Category::where('slug', $data['category'])->first();
+            if ($category) {
+                $data['category_id'] = $category->id;
+            } else {
+                $data['category_id'] = null;
+            }
+        } else {
+            $data['category_id'] = null;
+        }
+
         return response()->json($data);
     }
 }

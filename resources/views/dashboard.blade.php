@@ -12,7 +12,7 @@
                     <index-expenses></index-expenses>
                 </div>
             </div>
-            <div class="grid grid-cols-12 gap-4 h-screen">
+            <div class="grid grid-cols-12 gap-4" style="height: 85vh;">
                 <div
                     class="col-span-12 sm:col-span-4 rounded-lg p-4 items-center mt-10 shadow-xl overflow-clip bg-white">
                     <reciept-index>

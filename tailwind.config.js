@@ -28,6 +28,7 @@ export default {
         "bg-gray-300",
         "border-dashed",
         "border-gray-900/25",
+        "text-5xl",
     ],
 
     plugins: [forms],

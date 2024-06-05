@@ -47,6 +47,12 @@ class CategorySeeder extends Seeder
                 'keyword' => 'health, wellness, vitamins, medicine, first aid',
                 'slug' => 'health-wellness',
             ],
+
+            [
+                'name' => 'Household Essentials',
+                'keyword' => 'household, essentials, cleaning, supplies, home, maintenance',
+                'slug' => 'household-essentials',
+            ],
         ];
 
         foreach ($categories as $category) {
