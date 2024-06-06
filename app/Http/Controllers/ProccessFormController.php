@@ -58,7 +58,7 @@ class ProccessFormController extends Controller
     
                             Provide the information as a JSON object containing the following keys:
                             - `store`: Indicate the name of the business or store from which the receipt originates with the location in bracket next to it. Adjust the spelling or capitalization if it is incorrect.
-                            - `amount`: Provide the total amount of the receipt without using commas or currency symbols. If uncertain, leave this field empty string; without attempting to compute it. Additionally, if a clubcard price is identified, the total price should be chosen since that reflects what the buyer paid.
+                            - `amount`: Provide the total amount of the receipt without using commas use the currency symbols. If uncertain, leave this field empty string; without attempting to compute it. Additionally, if a clubcard price is identified, the total price should be chosen since that reflects what the buyer paid.
                             - `description`: A brief overview of the items bought.
                             - `category`: When determining the appropriate, choose from the available options ($categories) based on the item's relevance.
     

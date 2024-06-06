@@ -51,8 +51,8 @@
                             </path>
                         </svg>
                     </button>
-                    <button type="button" @click="scanClick" :class="{ 'opacity-50': isScanClicked }"
-                        :disabled="isScanClicked"
+                    <button type="button" @click="scanClick"
+                        :class="{ 'bg-gray-300 cursor-not-allowed': buttonClicked }" :disabled="buttonClicked"
                         class="flex items-center ml-4 px-4 py-2 rounded-md bg-fuchsia-600 text-white font-bold">
                         <svg class="mr-2 h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -78,7 +78,7 @@
 <script setup>
 import { onMounted, ref, reactive } from 'vue';
 import EventBus from '../../event-bus';
-import axios from 'axios';
+const buttonClicked = ref(false);
 
 const receivedData = reactive({
     store: '',
@@ -89,6 +89,7 @@ const receivedData = reactive({
 
 const scanClick = () => {
     EventBus.emit('scan');
+    buttonClicked.value = true;
 };
 
 const categories = ref([]);
@@ -109,6 +110,9 @@ const fetchCategories = async () => {
         console.error('Error fetching categories:', error);
     }
 };
+EventBus.on('activateScan', () => {
+    buttonClicked.value = false;
+});
 onMounted(() => {
     fetchCategories();
     EventBus.on('dataReceived', data => {
@@ -125,17 +129,19 @@ onMounted(() => {
         } else {
             selectedCategory.value = '';
         }
+
+        buttonClicked.value = false;
     });
 });
 </script>
-
-
-
-
 
 <style>
 .bold-pound::before {
     content: "\00A3";
     font-weight: bold;
+}
+
+button[disabled] {
+    opacity: 0.9;
 }
 </style>

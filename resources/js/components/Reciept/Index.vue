@@ -1,6 +1,6 @@
 <template>
     <div class="border h-full flex justify-center items-center border-dashed border-gray-900/25 p-6 bg-gray-300 relative"
-        @dragover.prevent @drop.prevent="onDrop" :style="backgroundStyle">
+        @dragover.prevent @drop.prevent="onDrop" :style="backgroundStyle" :class="{ 'animate-scan': isScanning }">
         <div class="col-span-full">
             <div class="mt-2 flex justify-center items-center rounded-lg px-6 py-10">
                 <div class="text-center">
@@ -29,25 +29,23 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import axios from 'axios'; // import axios if not already imported
+import { ref, computed } from 'vue';
 import EventBus from '../../event-bus';
 import { useToast } from 'vue-toastification';
-
 const customImage = ref(null);
 const backgroundImage = ref(null);
 const toast = useToast();
-let selectedFile = null; // declare a variable to store the selected file
-
+let selectedFile = null;
+const isScanning = ref(false);
 const backgroundStyle = computed(() => {
-    return backgroundImage.value
-        ? {
+    return backgroundImage.value ?
+        {
             backgroundImage: `url(${backgroundImage.value})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-        }
-        : {};
+        } :
+        {};
 });
 
 const onFileChange = (event) => {
@@ -79,27 +77,44 @@ const onDrop = (event) => {
 const submitForm = async () => {
     if (!selectedFile) {
         toast.error('Please select a file before submitting.');
+        EventBus.emit('activateScan');
         return;
     }
     const formData = new FormData();
     formData.append('customImage', selectedFile);
-
     try {
+        isScanning.value = true;
         const response = await axios.post('/image-process', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        EventBus.emit('dataReceived', response.data)
-
+        EventBus.emit('dataReceived', response.data);
     } catch (error) {
         console.error('Error:', error);
+    } finally {
+        isScanning.value = false;
     }
 };
 
-onMounted(() => {
-    EventBus.on("scan", () => {
-        submitForm();
-    });
+
+
+EventBus.on("scan", () => {
+    submitForm();
 });
 </script>
+
+<style scoped>
+.animate-scan::before {
+    @apply w-full h-2 absolute top-0 left-0;
+    @apply bg-gradient-to-b from-transparent via-green-500/75 to-transparent;
+    animation: scan 2s ease-in-out infinite alternate;
+    content: '';
+}
+
+@keyframes scan {
+    100% {
+        @apply top-full -translate-y-full;
+    }
+}
+</style>
