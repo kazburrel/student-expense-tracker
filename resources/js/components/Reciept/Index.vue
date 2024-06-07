@@ -100,6 +100,7 @@ const submitForm = async () => {
 
 
 EventBus.on("scan", () => {
+    console.log('hi');
     submitForm();
 });
 </script>
