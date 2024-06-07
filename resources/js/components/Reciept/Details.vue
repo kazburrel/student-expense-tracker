@@ -87,10 +87,10 @@ const receivedData = reactive({
     category: ''
 });
 
-const scanClick = () => {
-    EventBus.emit('scan');
-    buttonClicked.value = true;
-};
+// const scanClick = () => {
+//     EventBus.emit('scan');
+//     buttonClicked.value = true;
+// };
 
 const categories = ref([]);
 const selectedCategory = ref('');
