@@ -29,6 +29,7 @@ export default {
         "border-dashed",
         "border-gray-900/25",
         "text-5xl",
+        "ml-4",
         "border-red-500",
     ],
 

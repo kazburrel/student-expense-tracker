@@ -5,7 +5,7 @@
                 <div class="sm:col-span-4">
                     <div class="mt-2">
                         <input id="store" name="store" type="text" placeholder="Store" :value="receivedData.store"
-                            disabled
+                            :disabled="receivedData.store !== ''"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 font-bold">
                     </div>
                 </div>
@@ -13,7 +13,7 @@
                 <div class="sm:col-span-4 mt-4">
                     <div class="mt-2">
                         <input id="amount" name="amount" type="text" placeholder="&#163; amount"
-                            :value="receivedData.amount" disabled
+                            :value="receivedData.amount" :disabled="receivedData.amount !== ''"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 font-bold">
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="col-span-full mt-4">
                     <div class="mt-2">
                         <textarea id="about" name="about" rows="10" placeholder="Description"
-                            :value="receivedData.description" disabled
+                            :value="receivedData.description" :disabled="receivedData.description !== ''"
                             class="block w-full rounded-md border-0 py-1.5 bg-gray-300 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 font-bold"></textarea>
                     </div>
                 </div>
@@ -87,10 +87,10 @@ const receivedData = reactive({
     category: ''
 });
 
-// const scanClick = () => {
-//     EventBus.emit('scan');
-//     buttonClicked.value = true;
-// };
+const scanClick = () => {
+    EventBus.emit('scan');
+    buttonClicked.value = true;
+};
 
 const categories = ref([]);
 const selectedCategory = ref('');
