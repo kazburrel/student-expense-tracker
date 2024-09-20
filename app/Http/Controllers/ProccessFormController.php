@@ -16,8 +16,14 @@ class ProccessFormController extends Controller
         return Category::all();
     }
 
+    /**
+     * This function handles the review of a form submission that includes an image file.
+     * It validates the request, processes the image, and interacts with the OpenAI API to extract information from the image.
+     * The extracted information is then processed and returned as a JSON response.
+     */
     public function reviewForm(Request $request)
     {
+        // Validate the request to ensure 'customImage' is provided
         try {
             $request->validate([
                 'customImage' => 'required',
@@ -25,8 +31,11 @@ class ProccessFormController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         }
+
+        // Retrieve the uploaded image file
         $image = $request->file('customImage');
-        // dd($image);
+
+        // Fetch all categories and transform them into a JSON string
         $categories = Category::all()
             ->map(function ($category) {
                 return [
@@ -35,6 +44,8 @@ class ProccessFormController extends Controller
                 ];
             })
             ->toJson();
+
+        // Interact with the OpenAI API to process the image and extract information
         $response = OpenAI::chat()->create([
             'model' => 'gpt-4-vision-preview',
             'max_tokens' => 1000,
@@ -74,11 +85,14 @@ class ProccessFormController extends Controller
             ]
         ]);
 
+        // Process the response from OpenAI
         $json = $response->choices[0]->message->content;
         $json = Str::markdown($json);
         $json = strip_tags($json);
         $json = html_entity_decode($json);
         $data = json_decode($json, true);
+
+        // Map the extracted category to the corresponding category ID
         if (!empty($data['category'])) {
             $category = Category::where('slug', $data['category'])->first();
             if ($category) {
@@ -90,6 +104,7 @@ class ProccessFormController extends Controller
             $data['category_id'] = null;
         }
 
+        // Return the processed data as a JSON response
         return response()->json($data);
     }
 }
